@@ -1,0 +1,149 @@
+{
+  "region": {
+    "id": "de-leipzig-demo",
+    "name": "Local Starter Pack (Leipzig demo)",
+    "center": { "lat": 51.3397, "lon": 12.3731 },
+    "note": "Mock GBIF-like occurrences for MVP only. Not for real foraging decisions."
+  },
+  "plants": [
+    {
+      "id": "taraxacum_officinale",
+      "scientificName": "Taraxacum officinale",
+      "commonName": "Dandelion",
+      "edibility": "edible",
+      "lookalikeWarning": "",
+      "seasonality": ["Low","Low","Medium","High","High","High","High","Medium","Medium","Low","Low","Low"],
+      "occurrences": [
+        {
+          "gbifID": "1000001",
+          "eventDate": "2025-04-12",
+          "decimalLatitude": 51.3419,
+          "decimalLongitude": 12.3754,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Leipzig Zentrum",
+          "recordedBy": "Mock Recorder"
+        },
+        {
+          "gbifID": "1000002",
+          "eventDate": "2025-05-03",
+          "decimalLatitude": 51.3332,
+          "decimalLongitude": 12.3628,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Clara-Zetkin-Park",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Vit C": "Medium",
+        "Protein": "2.7g",
+        "Fiber": "3.5g",
+        "Season": "Spring–Autumn"
+      },
+      "idMarkers": "Jagged rosette leaves, hollow stem, milky sap, single flower head per stem.",
+      "recipe": {
+        "prep": "Rinse well; avoid polluted areas.",
+        "simple": "Young leaf salad: lemon + olive oil + salt.",
+        "pairing": "Citrus, garlic, nuts."
+      }
+    },
+    {
+      "id": "urtica_dioica",
+      "scientificName": "Urtica dioica",
+      "commonName": "Stinging nettle",
+      "edibility": "edible",
+      "lookalikeWarning": "Handle with gloves. Confirm opposite leaves and stinging hairs.",
+      "seasonality": ["Low","Medium","High","High","High","Medium","Medium","Low","Low","Low","Low","Low"],
+      "occurrences": [
+        {
+          "gbifID": "1000101",
+          "eventDate": "2025-04-18",
+          "decimalLatitude": 51.3217,
+          "decimalLongitude": 12.3695,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Auwald edge",
+          "recordedBy": "Mock Recorder"
+        },
+        {
+          "gbifID": "1000102",
+          "eventDate": "2025-05-22",
+          "decimalLatitude": 51.3491,
+          "decimalLongitude": 12.3921,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Rosental",
+          "recordedBy": "Mock Recorder"
+        },
+        {
+          "gbifID": "1000103",
+          "eventDate": "2025-06-05",
+          "decimalLatitude": 51.3373,
+          "decimalLongitude": 12.4122,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Near Lene-Voigt-Park",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Vit C": "High",
+        "Protein": "2.5g",
+        "Iron": "Notable",
+        "Season": "Spring–Summer"
+      },
+      "idMarkers": "Opposite serrated leaves, stinging hairs, square-ish stem.",
+      "recipe": {
+        "prep": "Blanch 1–2 min to remove sting; drain.",
+        "simple": "Nettle pesto: nettle + oil + nuts + garlic + salt.",
+        "pairing": "Garlic, lemon, seeds."
+      }
+    },
+    {
+      "id": "allium_ursinum",
+      "scientificName": "Allium ursinum",
+      "commonName": "Wild garlic (ramsons)",
+      "edibility": "edible",
+      "lookalikeWarning": "Danger: lily-of-the-valley and autumn crocus are toxic. Garlic smell is key but verify leaf details.",
+      "seasonality": ["Low","Low","High","High","Medium","Low","Low","Low","Low","Low","Low","Low"],
+      "occurrences": [
+        {
+          "gbifID": "1000201",
+          "eventDate": "2025-03-30",
+          "decimalLatitude": 51.3601,
+          "decimalLongitude": 12.3432,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Riverside woodland",
+          "recordedBy": "Mock Recorder"
+        },
+        {
+          "gbifID": "1000202",
+          "eventDate": "2025-04-06",
+          "decimalLatitude": 51.3556,
+          "decimalLongitude": 12.3519,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Woodland trail",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Vit C": "Medium",
+        "Aroma": "Strong garlic",
+        "Season": "Early spring",
+        "Prep": "Use fresh"
+      },
+      "idMarkers": "Broad soft leaves, strong garlic smell, grows in carpets in moist woodland.",
+      "recipe": {
+        "prep": "Wash thoroughly; use fresh leaves.",
+        "simple": "Wild garlic butter: chopped leaves + vegan butter + salt.",
+        "pairing": "Potatoes, pasta, mushrooms."
+      }
+    },
+    {
+      "id": "rubus_fruticosus",
+      "scientificName": "Rubus fruticosus agg.",
+      "commonName": "Blackberry",
+      "
