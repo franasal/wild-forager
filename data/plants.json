@@ -146,4 +146,255 @@
       "id": "rubus_fruticosus",
       "scientificName": "Rubus fruticosus agg.",
       "commonName": "Blackberry",
-      "
+      "edibility": "edible",
+      "lookalikeWarning": "",
+      "seasonality": ["Low","Low","Low","Low","Low","Low","Medium","High","High","Medium","Low","Low"],
+      "occurrences": [
+        {
+          "gbifID": "1000301",
+          "eventDate": "2025-08-21",
+          "decimalLatitude": 51.3279,
+          "decimalLongitude": 12.4012,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Field margin",
+          "recordedBy": "Mock Recorder"
+        },
+        {
+          "gbifID": "1000302",
+          "eventDate": "2025-09-02",
+          "decimalLatitude": 51.3178,
+          "decimalLongitude": 12.3899,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Canal path",
+          "recordedBy": "Mock Recorder"
+        },
+        {
+          "gbifID": "1000303",
+          "eventDate": "2025-09-09",
+          "decimalLatitude": 51.3452,
+          "decimalLongitude": 12.3651,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Park edge",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Fiber": "High",
+        "Vit C": "Medium",
+        "Season": "Late summer",
+        "Taste": "Sweet-tart"
+      },
+      "idMarkers": "Thorny brambles, ripe berries turn deep black and detach easily.",
+      "recipe": {
+        "prep": "Rinse; inspect for insects.",
+        "simple": "Compote: simmer berries + a little sugar/lemon.",
+        "pairing": "Oats, yogurt, mint."
+      }
+    },
+    {
+      "id": "plantago_major",
+      "scientificName": "Plantago major",
+      "commonName": "Broadleaf plantain",
+      "edibility": "edible",
+      "lookalikeWarning": "",
+      "seasonality": ["Low","Low","Medium","High","High","High","High","Medium","Medium","Low","Low","Low"],
+      "occurrences": [
+        {
+          "gbifID": "1000401",
+          "eventDate": "2025-05-12",
+          "decimalLatitude": 51.3359,
+          "decimalLongitude": 12.3564,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Pathside lawn",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Fiber": "Medium",
+        "Season": "Spring–Autumn",
+        "Use": "Leafy greens",
+        "Notes": "Young leaves best"
+      },
+      "idMarkers": "Oval leaves in rosette with strong parallel veins; seed spikes from center.",
+      "recipe": {
+        "prep": "Use young leaves; older leaves get tough.",
+        "simple": "Sauté: leaves + garlic + oil + salt.",
+        "pairing": "Garlic, onions, lentils."
+      }
+    },
+    {
+      "id": "stellaria_media",
+      "scientificName": "Stellaria media",
+      "commonName": "Chickweed",
+      "edibility": "edible",
+      "lookalikeWarning": "Confirm the single hair-line on stem and small star-like flowers.",
+      "seasonality": ["High","High","Medium","Low","Low","Low","Low","Low","Low","Medium","High","High"],
+      "occurrences": [
+        {
+          "gbifID": "1000501",
+          "eventDate": "2025-02-10",
+          "decimalLatitude": 51.3423,
+          "decimalLongitude": 12.3822,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Garden edge",
+          "recordedBy": "Mock Recorder"
+        },
+        {
+          "gbifID": "1000502",
+          "eventDate": "2025-11-18",
+          "decimalLatitude": 51.3341,
+          "decimalLongitude": 12.3720,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Shaded courtyard",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Taste": "Mild",
+        "Season": "Cool months",
+        "Use": "Raw greens",
+        "Notes": "Fragile"
+      },
+      "idMarkers": "Tiny opposite leaves, delicate stems with a single line of hairs, small white star flowers.",
+      "recipe": {
+        "prep": "Rinse gently.",
+        "simple": "Use raw like lettuce in sandwiches.",
+        "pairing": "Lemon, mustard, cucumber."
+      }
+    },
+    {
+      "id": "rumex_acetosa",
+      "scientificName": "Rumex acetosa",
+      "commonName": "Common sorrel",
+      "edibility": "edible",
+      "lookalikeWarning": "Contains oxalates; avoid large amounts if sensitive. Confirm arrow-shaped leaves.",
+      "seasonality": ["Low","Low","Medium","High","High","Medium","Low","Low","Low","Low","Low","Low"],
+      "occurrences": [
+        {
+          "gbifID": "1000601",
+          "eventDate": "2025-04-28",
+          "decimalLatitude": 51.3528,
+          "decimalLongitude": 12.3789,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Meadow edge",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Vit C": "High",
+        "Taste": "Sour",
+        "Season": "Spring–Summer",
+        "Use": "Soup herb"
+      },
+      "idMarkers": "Arrow-shaped leaves with backward-pointing lobes; tangy/lemony taste.",
+      "recipe": {
+        "prep": "Use a small amount; strong flavor.",
+        "simple": "Sorrel soup base: sauté + broth + blend.",
+        "pairing": "Potatoes, dill."
+      }
+    },
+    {
+      "id": "glechoma_hederacea",
+      "scientificName": "Glechoma hederacea",
+      "commonName": "Ground-ivy",
+      "edibility": "edible",
+      "lookalikeWarning": "Use sparingly. Confirm purple flowers and aroma.",
+      "seasonality": ["Low","Low","Medium","High","High","Medium","Low","Low","Low","Low","Low","Low"],
+      "occurrences": [
+        {
+          "gbifID": "1000701",
+          "eventDate": "2025-04-15",
+          "decimalLatitude": 51.3464,
+          "decimalLongitude": 12.3602,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Shaded park lawn",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Use": "Herb",
+        "Aroma": "Strong",
+        "Season": "Spring",
+        "Taste": "Minty-bitter"
+      },
+      "idMarkers": "Creeping groundcover, roundish scalloped leaves, purple flowers, distinct aroma.",
+      "recipe": {
+        "prep": "Use sparingly.",
+        "simple": "Chop into soups or salads.",
+        "pairing": "Potato dishes, legumes."
+      }
+    },
+    {
+      "id": "sambucus_nigra",
+      "scientificName": "Sambucus nigra",
+      "commonName": "Elderflower",
+      "edibility": "edible",
+      "lookalikeWarning": "Confirm woody shrub/tree and flower cluster structure; avoid confusing with non-target Sambucus types.",
+      "seasonality": ["Low","Low","Low","Medium","High","High","Low","Low","Low","Low","Low","Low"],
+      "occurrences": [
+        {
+          "gbifID": "1000801",
+          "eventDate": "2025-06-02",
+          "decimalLatitude": 51.3399,
+          "decimalLongitude": 12.4193,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Shrub line near path",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Use": "Infusion",
+        "Aroma": "Floral",
+        "Season": "Late spring",
+        "Prep": "Shake insects out"
+      },
+      "idMarkers": "Creamy flower clusters, sweet aroma; shrub/tree with pinnate leaves.",
+      "recipe": {
+        "prep": "Shake off insects; do not wash hard.",
+        "simple": "Cold infusion: flowers + lemon overnight.",
+        "pairing": "Lemon, mint, berries."
+      }
+    },
+    {
+      "id": "rosa_canina",
+      "scientificName": "Rosa canina",
+      "commonName": "Rosehip",
+      "edibility": "edible",
+      "lookalikeWarning": "Remove irritating hairs inside hips; avoid sprayed ornamental roses.",
+      "seasonality": ["Medium","Medium","Low","Low","Low","Low","Low","Low","Medium","High","High","High"],
+      "occurrences": [
+        {
+          "gbifID": "1000901",
+          "eventDate": "2025-10-20",
+          "decimalLatitude": 51.3592,
+          "decimalLongitude": 12.3974,
+          "country": "Germany",
+          "stateProvince": "Saxony",
+          "verbatimLocality": "Hedgerow",
+          "recordedBy": "Mock Recorder"
+        }
+      ],
+      "nutritionTopTrumps": {
+        "Vit C": "High",
+        "Season": "Autumn–Winter",
+        "Prep": "Remove hairs",
+        "Use": "Tea/jam"
+      },
+      "idMarkers": "Red/orange hips on wild rose; pick firm hips after first chill.",
+      "recipe": {
+        "prep": "Split hips; remove seeds and hairs.",
+        "simple": "Tea: simmer cleaned hips 10–15 min.",
+        "pairing": "Cinnamon, clove."
+      }
+    }
+  ]
+}
