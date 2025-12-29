@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -32,7 +33,6 @@
       overflow:hidden;
     }
 
-    /* App shell */
     .app{
       height:100%;
       display:flex;
@@ -67,9 +67,12 @@
       border-radius: 999px;
       color:var(--muted);
       background: rgba(16,27,38,.55);
+      max-width: 52%;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    /* Radar layout */
     .radar{
       flex:1;
       display:flex;
@@ -89,7 +92,6 @@
       background: #0a0f14;
     }
     #map{ height:100%; width:100%; }
-    /* “grayscale, high contrast” without needing special tiles */
     .leaflet-tile{
       filter: grayscale(1) contrast(1.25) brightness(.92);
     }
@@ -174,7 +176,6 @@
     }
     .btn:active{ transform: translateY(1px); }
 
-    /* Deck */
     .deckWrap{
       flex: 1 1 auto;
       min-height:0;
@@ -290,7 +291,6 @@
     }
     .miniBottom b{ color:var(--ink); font-weight:600; }
 
-    /* Fullscreen overlay */
     .overlay{
       position:fixed;
       inset:0;
@@ -419,7 +419,6 @@
     }
     .actionTab:active{ transform: translateY(1px); }
 
-    /* Flip (recipe) */
     .flipStage{
       position:relative;
       perspective: 1200px;
@@ -487,7 +486,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Risk modal */
     .modal{
       position:fixed;
       inset:0;
@@ -536,7 +534,6 @@
       background: rgba(255,107,107,.10);
     }
 
-    /* Utility */
     .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   </style>
 </head>
@@ -548,21 +545,25 @@
         <strong>Wilder</strong>
         <span>Foraging MVP (Local Edition)</span>
       </div>
-      <div class="pill" id="regionPill">Region: Local</div>
+      <div class="pill" id="regionPill">Region: Loading…</div>
     </div>
 
     <div class="radar">
       <div class="mapWrap">
         <div id="map"></div>
+
         <div class="mapHUD">
-          <div class="hudBox" id="hudLeft"><b>Radar</b><br>Seasonality-based (MVP)</div>
+          <div class="hudBox" id="hudLeft"><b>Radar</b><br><span id="hudMode">Loading data…</span></div>
           <div class="hudBox" id="hudRight"><b id="hudCount">0</b> cards<br><span id="hudMonth"></span></div>
         </div>
+
         <div class="reticle">
           <div class="reticlePulse"></div>
         </div>
+
         <div class="btnRow">
           <div class="btn" id="btnLocate">Locate</div>
+          <div class="btn" id="btnAll">All points</div>
           <div class="btn" id="btnResort">Resort</div>
         </div>
       </div>
@@ -571,7 +572,7 @@
         <div class="deckHeader">
           <div class="title">
             <strong>The Deck</strong>
-            <span>Most likely plants this month (MVP cheat)</span>
+            <span>Sorted by nearby observations + seasonality (MVP)</span>
           </div>
           <div class="meta">
             <span class="mono" id="metaDate"></span>
@@ -582,7 +583,6 @@
     </div>
   </div>
 
-  <!-- Specimen overlay -->
   <div class="overlay" id="overlay">
     <div class="sheet">
       <div class="sheetTop">
@@ -637,13 +637,12 @@
 
         <div class="block danger" style="margin-top:12px;">
           <h3>Safety</h3>
-          <p>Never eat anything you cannot identify with high confidence. This app is a starter pack, not a license to gamble with your liver.</p>
+          <p>Never eat anything you cannot identify with high confidence. This app is a starter pack, not a guarantee.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- First-run risk modal -->
   <div class="modal" id="riskModal">
     <div class="modalCard">
       <h2>Foraging disclaimer</h2>
@@ -651,7 +650,7 @@
       <ul>
         <li>Misidentification can cause serious harm.</li>
         <li>Check lookalikes and use multiple ID markers.</li>
-        <li>Avoid polluted areas (roadsides, dog parks, sprayed lawns).</li>
+        <li>Avoid polluted areas (roadsides, sprayed lawns).</li>
       </ul>
       <div class="modalRow">
         <div class="btn btnDanger" id="btnDecline">I do not agree</div>
@@ -662,41 +661,419 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Local Edition starter pack (example for Central Europe / Germany-ish).
-    // Replace/curate later. The important part is: safe-ish, distinctive, limited.
-    const PLANTS = [
-      {
-        id:"dandelion",
-        sci:"Taraxacum officinale",
-        common:"Dandelion",
-        nutrients:{ "Vit C":"Medium", "Protein":"2.7g", "Fiber":"3.5g", "Season":"Spring–Autumn" },
-        idMarkers:"Jagged rosette leaves, hollow stem, milky sap, single flower head per stem.",
-        lookalike:"",
-        recipe:{
-          prep:"Rinse well; avoid dog-traffic areas.",
-          simple:"Dandelion leaf salad: young leaves + lemon + olive oil + salt.",
-          pairing:"Citrus, garlic, nuts."
-        },
-        seasonality:[ "Low","Low","Medium","High","High","High","High","Medium","Medium","Low","Low","Low" ]
-      },
-      {
-        id:"nettle",
-        sci:"Urtica dioica",
-        common:"Stinging nettle",
-        nutrients:{ "Vit C":"High", "Protein":"2.5g", "Iron":"Notable", "Season":"Spring–Summer" },
-        idMarkers:"Opposite serrated leaves, stinging hairs, square-ish stem; handle with gloves.",
-        lookalike:"Young nettle can be confused with non-stinging dead-nettles (Lamium) which are also edible, but still confirm leaf/stem details.",
-        recipe:{
-          prep:"Blanch 1–2 min to remove sting; drain.",
-          simple:"Nettle pesto: blanched nettle + olive oil + nuts + garlic + salt.",
-          pairing:"Garlic, lemon, seeds."
-        },
-        seasonality:[ "Low","Medium","High","High","High","Medium","Medium","Low","Low","Low","Low","Low" ]
-      },
-      {
-        id:"wild_garlic",
-        sci:"Allium ursinum",
-        common:"Wild garlic (ramsons)",
-        nutrients:{ "Vit C":"Medium", "Sulfur compounds":"High", "Season":"Early spring", "Aroma":"Strong garlic" },
-        idMarkers:"Broad soft leaves, strong garlic smell when crushed, grows in carpets in moist woodland.",
-        lookalike:"Danger: Lily-of-the-valley (Convallaria) and autumn crocus (Colchicum) are toxic and can look similar. G
+    let PLANTS = []; // loaded from data/plants.json
+    let REGION = null;
+
+    const state = {
+      userLat: 51.3397,  // fallback: Leipzig-ish
+      userLon: 12.3731,
+      selected: null
+    };
+
+    function monthIndex(){
+      return new Date().getMonth(); // 0..11
+    }
+    function monthLabel(){
+      return new Date().toLocaleString(undefined, { month:"long", year:"numeric" });
+    }
+    function scoreLabelFromSeasonality(s){
+      if(s === "High") return { label:"Common", cls:"common" };
+      if(s === "Medium") return { label:"Occasional", cls:"medium" };
+      return { label:"Rare", cls:"rare" };
+    }
+
+    function plantIconSVG(seed){
+      const hue = (seed.split("").reduce((a,c)=>a+c.charCodeAt(0),0) * 7) % 360;
+      return `
+        <svg class="plantIcon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Plant">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="hsla(${hue},70%,55%,.95)"/>
+              <stop offset="1" stop-color="hsla(${(hue+35)%360},70%,45%,.95)"/>
+            </linearGradient>
+          </defs>
+          <path d="M100 175 C92 150, 95 125, 100 105 C105 125,108 150,100 175 Z" fill="rgba(255,255,255,.08)"/>
+          <path d="M100 105 C70 92, 50 70, 52 52 C70 52, 88 66, 100 88 C112 66,130 52,148 52 C150 70,130 92,100 105 Z"
+                fill="url(#g)" stroke="rgba(255,255,255,.12)" stroke-width="2"/>
+          <path d="M100 88 C90 78, 78 70, 66 64" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M100 88 C110 78, 122 70, 134 64" fill="none" stroke="rgba(0,0,0,.22)" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="100" cy="105" r="4" fill="rgba(0,0,0,.25)"/>
+        </svg>
+      `;
+    }
+
+    function toRad(deg){ return deg * Math.PI / 180; }
+    function haversineKm(aLat, aLon, bLat, bLon){
+      const R = 6371;
+      const dLat = toRad(bLat - aLat);
+      const dLon = toRad(bLon - aLon);
+      const lat1 = toRad(aLat);
+      const lat2 = toRad(bLat);
+      const s1 = Math.sin(dLat/2);
+      const s2 = Math.sin(dLon/2);
+      const x = s1*s1 + Math.cos(lat1)*Math.cos(lat2)*s2*s2;
+      const c = 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
+      return R * c;
+    }
+
+    function plantNearestDistanceKm(plant, lat, lon){
+      let best = Infinity;
+      for(const o of (plant.occurrences || [])){
+        const olat = o.decimalLatitude;
+        const olon = o.decimalLongitude;
+        if(typeof olat !== "number" || typeof olon !== "number") continue;
+        const d = haversineKm(lat, lon, olat, olon);
+        if(d < best) best = d;
+      }
+      return best;
+    }
+
+    function sortedPlants(){
+      const m = monthIndex();
+
+      const arr = [...PLANTS].map(p => {
+        const season = (p.seasonality && p.seasonality[m]) ? p.seasonality[m] : "Low";
+        const seasonRank = (season === "High") ? 3 : (season === "Medium" ? 2 : 1);
+        const dist = plantNearestDistanceKm(p, state.userLat, state.userLon);
+
+        return { p, season, seasonRank, dist };
+      });
+
+      // Sort by nearest observations first, then seasonality, then frequency, then name.
+      arr.sort((a,b) =>
+        (a.dist - b.dist) ||
+        (b.seasonRank - a.seasonRank) ||
+        ((b.p.frequency || 0) - (a.p.frequency || 0)) ||
+        (a.p.commonName || "").localeCompare(b.p.commonName || "")
+      );
+
+      return arr;
+    }
+
+    // Leaflet map
+    const map = L.map("map", { zoomControl:false }).setView([state.userLat, state.userLon], 12);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
+
+    const userMarker = L.circleMarker([state.userLat, state.userLon], {
+      radius: 7,
+      weight: 2,
+      color: "rgba(126,231,135,.85)",
+      fillColor: "rgba(126,231,135,.20)",
+      fillOpacity: 1
+    }).addTo(map);
+
+    const occurrencesLayer = L.layerGroup().addTo(map);
+
+    function setLocation(lat, lon){
+      state.userLat = lat;
+      state.userLon = lon;
+      userMarker.setLatLng([lat, lon]);
+      map.setView([lat, lon], 13, { animate:true });
+      renderDeck();
+    }
+
+    // HUD + Deck elements
+    const deckEl = document.getElementById("deck");
+    const hudMonthEl = document.getElementById("hudMonth");
+    const hudCountEl = document.getElementById("hudCount");
+    const metaDateEl = document.getElementById("metaDate");
+    const regionPill = document.getElementById("regionPill");
+    const hudMode = document.getElementById("hudMode");
+
+    function renderDeck(){
+      hudMonthEl.textContent = monthLabel();
+      metaDateEl.textContent = monthLabel();
+
+      const items = sortedPlants();
+      hudCountEl.textContent = String(items.length);
+
+      deckEl.innerHTML = "";
+
+      for(const {p, season, dist} of items){
+        const {label, cls} = scoreLabelFromSeasonality(season);
+        const obs = Number.isFinite(p.frequency) ? p.frequency : ((p.occurrences || []).length);
+
+        const card = document.createElement("div");
+        card.className = "cardMini";
+
+        const distText = (dist === Infinity) ? "no points" : `${dist.toFixed(1)} km`;
+
+        card.innerHTML = `
+          <div class="miniTop">
+            <div class="miniName">
+              <strong>${escapeHtml(p.commonName || "Unknown")}</strong>
+              <em>${escapeHtml(p.scientificName || "")}</em>
+            </div>
+            <div class="badge ${cls}">${label}</div>
+          </div>
+          <div class="miniVisual">${plantIconSVG(p.id || p.scientificName || "plant")}</div>
+          <div class="miniBottom">
+            <span>Obs: <b>${obs}</b> · Nearest: <b>${distText}</b></span>
+            <span><b>${escapeHtml(season)}</b></span>
+          </div>
+        `;
+
+        card.addEventListener("click", () => {
+          showPlantOnMap(p);
+          openSpecimen(p);
+        });
+
+        deckEl.appendChild(card);
+      }
+    }
+
+    function escapeHtml(s){
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function plotAllOccurrences(){
+      occurrencesLayer.clearLayers();
+
+      const pts = [];
+      for(const p of PLANTS){
+        for(const o of (p.occurrences || [])){
+          const lat = o.decimalLatitude;
+          const lon = o.decimalLongitude;
+          if(typeof lat !== "number" || typeof lon !== "number") continue;
+
+          pts.push([lat, lon]);
+
+          const date = o.eventDate || "unknown date";
+          const locality = o.verbatimLocality || "";
+          const recordedBy = o.recordedBy ? `Recorded by: ${o.recordedBy}` : "";
+
+          L.circleMarker([lat, lon], {
+            radius: 4,
+            weight: 1,
+            color: "rgba(126,231,135,.75)",
+            fillColor: "rgba(126,231,135,.25)",
+            fillOpacity: 1
+          })
+          .bindPopup(
+            `<b>${escapeHtml(p.commonName || "")}</b><br>` +
+            `${escapeHtml(p.scientificName || "")}<br>` +
+            `${escapeHtml(date)}<br>` +
+            `${escapeHtml(locality)}<br>` +
+            `${escapeHtml(recordedBy)}`
+          )
+          .addTo(occurrencesLayer);
+        }
+      }
+
+      // If we have points, fit; otherwise just sit quietly.
+      if(pts.length){
+        const b = L.latLngBounds(pts);
+        map.fitBounds(b, { padding:[20,20] });
+      }
+    }
+
+    function showPlantOnMap(plant){
+      occurrencesLayer.clearLayers();
+
+      const pts = [];
+      for(const o of (plant.occurrences || [])){
+        const lat = o.decimalLatitude;
+        const lon = o.decimalLongitude;
+        if(typeof lat !== "number" || typeof lon !== "number") continue;
+
+        pts.push([lat, lon]);
+
+        const date = o.eventDate || "unknown date";
+        const locality = o.verbatimLocality || "";
+        const recordedBy = o.recordedBy ? `Recorded by: ${o.recordedBy}` : "";
+
+        L.circleMarker([lat, lon], {
+          radius: 5,
+          weight: 1,
+          color: "rgba(255,204,102,.85)",
+          fillColor: "rgba(255,204,102,.25)",
+          fillOpacity: 1
+        })
+        .bindPopup(
+          `<b>${escapeHtml(plant.commonName || "")}</b><br>` +
+          `${escapeHtml(plant.scientificName || "")}<br>` +
+          `${escapeHtml(date)}<br>` +
+          `${escapeHtml(locality)}<br>` +
+          `${escapeHtml(recordedBy)}`
+        )
+        .addTo(occurrencesLayer);
+      }
+
+      if(pts.length){
+        map.fitBounds(L.latLngBounds(pts), { padding:[20,20] });
+      }
+    }
+
+    // Specimen overlay
+    const overlay = document.getElementById("overlay");
+    const specSci = document.getElementById("specSci");
+    const specCommon = document.getElementById("specCommon");
+    const specVisual = document.getElementById("specVisual");
+    const specGrid = document.getElementById("specGrid");
+    const specId = document.getElementById("specId");
+    const specLookBlock = document.getElementById("specLookBlock");
+    const specLook = document.getElementById("specLook");
+
+    const btnClose = document.getElementById("btnClose");
+    btnClose.addEventListener("click", closeSpecimen);
+    overlay.addEventListener("click", (e) => {
+      if(e.target === overlay) closeSpecimen();
+    });
+
+    // Kitchen flip
+    const btnCulinary = document.getElementById("btnCulinary");
+    const flipStage = document.getElementById("flipStage");
+    const flip = document.getElementById("flip");
+    const recipeBody = document.getElementById("recipeBody");
+    const btnFlip = document.getElementById("btnFlip");
+    const btnFlipBack = document.getElementById("btnFlipBack");
+    const btnHideKitchen = document.getElementById("btnHideKitchen");
+    const btnHideKitchen2 = document.getElementById("btnHideKitchen2");
+
+    btnFlip.addEventListener("click", () => flip.classList.add("flipped"));
+    btnFlipBack.addEventListener("click", () => flip.classList.remove("flipped"));
+    btnHideKitchen.addEventListener("click", () => { flipStage.classList.remove("show"); flip.classList.remove("flipped"); });
+    btnHideKitchen2.addEventListener("click", () => { flipStage.classList.remove("show"); flip.classList.remove("flipped"); });
+
+    function openSpecimen(p){
+      state.selected = p;
+
+      specSci.textContent = p.scientificName || "";
+      specCommon.textContent = p.commonName || "";
+      specVisual.innerHTML = plantIconSVG(p.id || p.scientificName || "plant");
+
+      specGrid.innerHTML = "";
+
+      const stats = p.nutritionTopTrumps || {};
+      const fallbackStats = {
+        "Observations": String(p.frequency ?? (p.occurrences || []).length),
+        "Season": (p.seasonality && p.seasonality[monthIndex()]) ? p.seasonality[monthIndex()] : "Low"
+      };
+      const merged = Object.keys(stats).length ? stats : fallbackStats;
+
+      for(const [k,v] of Object.entries(merged)){
+        const kv = document.createElement("div");
+        kv.className = "kv";
+        kv.innerHTML = `<label>${escapeHtml(k)}</label><b>${escapeHtml(v)}</b>`;
+        specGrid.appendChild(kv);
+      }
+
+      specId.textContent = p.idMarkers || "No identification markers provided.";
+
+      const warn = (p.lookalikeWarning || "").trim();
+      if(warn){
+        specLookBlock.style.display = "block";
+        specLook.textContent = warn;
+      } else {
+        specLookBlock.style.display = "none";
+      }
+
+      flipStage.classList.remove("show");
+      flip.classList.remove("flipped");
+
+      overlay.classList.add("show");
+    }
+
+    function closeSpecimen(){
+      overlay.classList.remove("show");
+      flipStage.classList.remove("show");
+      flip.classList.remove("flipped");
+    }
+
+    btnCulinary.addEventListener("click", () => {
+      if(!state.selected) return;
+      const r = state.selected.recipe || { prep:"", simple:"", pairing:"" };
+
+      recipeBody.innerHTML = `
+        <div class="note"><b>Preparation:</b> ${escapeHtml(r.prep || "—")}</div>
+        <div class="noteLine"></div>
+        <div class="note"><b>Simple recipe:</b> ${escapeHtml(r.simple || "—")}</div>
+        <div class="noteLine"></div>
+        <div class="note"><b>Pairing:</b> ${escapeHtml(r.pairing || "—")}</div>
+      `;
+
+      flipStage.classList.add("show");
+      flip.classList.remove("flipped");
+      setTimeout(() => flipStage.scrollIntoView({ behavior:"smooth", block:"start" }), 50);
+    });
+
+    // Buttons
+    document.getElementById("btnResort").addEventListener("click", renderDeck);
+    document.getElementById("btnAll").addEventListener("click", plotAllOccurrences);
+    document.getElementById("btnLocate").addEventListener("click", locate);
+
+    function locate(){
+      if(!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setLocation(pos.coords.latitude, pos.coords.longitude),
+        () => {},
+        { enableHighAccuracy:true, timeout: 8000, maximumAge: 60000 }
+      );
+    }
+
+    // Risk modal (first run)
+    const riskModal = document.getElementById("riskModal");
+    const btnAgree = document.getElementById("btnAgree");
+    const btnDecline = document.getElementById("btnDecline");
+
+    function showRisk(){ riskModal.classList.add("show"); }
+    function hideRisk(){ riskModal.classList.remove("show"); }
+
+    btnAgree.addEventListener("click", () => {
+      localStorage.setItem("wilder_risk_ok", "true");
+      hideRisk();
+    });
+    btnDecline.addEventListener("click", () => {
+      alert("Understood. The app will not continue without agreement.");
+    });
+
+    async function loadPlants(){
+      hudMode.textContent = "Loading data…";
+
+      const res = await fetch("data/plants.json", { cache: "no-store" });
+      if(!res.ok) throw new Error("Failed to load data/plants.json");
+
+      const data = await res.json();
+      REGION = data.region || null;
+
+      PLANTS = (data.plants || []).map(p => ({
+        ...p,
+        frequency: (p.occurrences || []).length
+      }));
+
+      const regionName = REGION?.name || "Local Starter Pack";
+      regionPill.textContent = `Region: ${regionName}`;
+
+      hudMode.textContent = "Mock GBIF-like occurrences (MVP)";
+
+      // Center map on region center if provided
+      if(REGION?.center && typeof REGION.center.lat === "number" && typeof REGION.center.lon === "number"){
+        setLocation(REGION.center.lat, REGION.center.lon);
+      } else {
+        // Still update deck using fallback location
+        renderDeck();
+      }
+
+      plotAllOccurrences();
+    }
+
+    // Init
+    locate();
+
+    loadPlants().catch(err => {
+      console.error(err);
+      hudMode.textContent = "Missing data file: data/plants.json";
+      regionPill.textContent = "Region: Error";
+    });
+
+    if(localStorage.getItem("wilder_risk_ok") !== "true"){
+      showRisk();
+    }
+  </script>
+</body>
+</html>
