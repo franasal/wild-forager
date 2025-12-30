@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { escapeHtml, plantIconSVG, monthIndex } from "./utils.js";
+import { escapeHtml, monthIndex } from "./utils.js";
 
 export function initSpecimen(){
   const overlay = document.getElementById("overlay");
@@ -46,7 +46,18 @@ export function openSpecimen(p){
 
   document.getElementById("specSci").textContent = p.scientificName || "";
   document.getElementById("specCommon").textContent = p.commonName || "";
-  document.getElementById("specVisual").innerHTML = plantIconSVG(p.id || p.scientificName || "plant");
+
+  const imgUrl = p.image?.filePath || "";
+  const filePage = p.image?.filePage || "";
+  const license = p.image?.license || "See source";
+  const author = p.image?.author || "See source";
+
+  document.getElementById("specVisual").innerHTML = imgUrl ? `
+    <div class="specPhotoWrap">
+      <img class="specPhoto" src="${escapeHtml(imgUrl)}" alt="${escapeHtml(p.commonName || p.scientificName || "plant")}">
+      ${filePage ? `<a class="imgCredit" href="${escapeHtml(filePage)}" target="_blank" rel="noopener">Image: ${escapeHtml(author)} · ${escapeHtml(license)}</a>` : ""}
+    </div>
+  ` : `<div class="specPhotoFallback">No image available</div>`;
 
   const specGrid = document.getElementById("specGrid");
   specGrid.innerHTML = "";
@@ -76,7 +87,6 @@ export function openSpecimen(p){
     lookBlock.style.display = "none";
   }
 
-  // reset kitchen view
   document.getElementById("flipStage").classList.remove("show");
   document.getElementById("flip").classList.remove("flipped");
 
