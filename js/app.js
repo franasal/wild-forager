@@ -1,8 +1,10 @@
 import { state } from "./state.js";
-import { initMap, setLocation, plotAllOccurrences, showPlantOnMap } from "./map.js";
+import { initMap, setLocation, plotAllOccurrences, showPlantOnMap, showHotspots } from "./map.js";
 import { renderDeck } from "./deck.js";
 import { initSpecimen, openSpecimen } from "./specimen.js";
 import { initRiskModal } from "./risk.js";
+import { aggregateHotspots, mergeHotspots } from "./hotspots.js";
+
 
 async function loadPlants(){
   document.getElementById("hudMode").textContent = "Loading data…";
@@ -66,10 +68,35 @@ function onSelectPlant(plant){
   openSpecimen(plant);
 }
 
+function onSelectPlant(plant){
+  showPlantOnMap(plant);
+  openSpecimen(plant);
+}
+
+// Timeframe helper (for now: last 365 days)
+function lastDaysRange(days){
+  const end = new Date();
+  const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
+  return { start, end };
+}
+
+function showAllHotspots(){
+  // later you’ll swap this to real GBIF-occurrence dates. same logic.
+  const { start, end } = lastDaysRange(365);
+
+  const perPlant = state.plants.map(p =>
+    aggregateHotspots(p.occurrences || [], { gridKm: 1, start, end })
+  );
+
+  const merged = mergeHotspots(perPlant);
+  showHotspots(merged, { title: "All plants (last 365 days)" });
+}
+
 function wireButtons(){
   document.getElementById("btnLocate").addEventListener("click", locate);
   document.getElementById("btnAll").addEventListener("click", plotAllOccurrences);
   document.getElementById("btnResort").addEventListener("click", () => renderDeck({ onSelectPlant }));
+  document.getElementById("btnHotspots").addEventListener("click", showAllHotspots);
 }
 
 async function main(){
