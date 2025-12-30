@@ -34,11 +34,6 @@ export function clearMapLayers(){
   occurrencesLayer.clearLayers();
 }
 
-/**
- * Draw hotspot circles from aggregated cells.
- * @param {{cells:Array<{lat:number, lon:number, count:number, monthCounts:number[]}>}} hotspots
- * @param {{title?:string}} opts
- */
 export function showHotspots(hotspots, opts = {}){
   clearMapLayers();
 
@@ -48,7 +43,6 @@ export function showHotspots(hotspots, opts = {}){
   const cells = hotspots?.cells || [];
   if(!cells.length) return;
 
-  // normalize by max count for nicer scaling
   const max = Math.max(...cells.map(c => c.count || 0), 1);
 
   for(const c of cells){
@@ -61,7 +55,6 @@ export function showHotspots(hotspots, opts = {}){
     const count = c.count || 0;
     const intensity = count / max;
 
-    // radius 6..24-ish (log-ish feel without math drama)
     const radius = 6 + (18 * Math.sqrt(intensity));
     const fillOpacity = Math.min(0.85, 0.15 + 0.7 * intensity);
 
