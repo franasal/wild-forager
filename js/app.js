@@ -5,8 +5,15 @@ import { initSpecimen, openSpecimen } from "./specimen.js";
 import { initRiskModal } from "./risk.js";
 import { aggregateHotspots, mergeHotspots } from "./hotspots.js";
 
+function debug(msg){
+  console.log("[Wilder]", msg);
+  const el = document.getElementById("debugPill");
+  if(el) el.textContent = "Boot: " + msg;
+}
 
 async function loadPlants(){
+  debug("loadPlants()");
+
   document.getElementById("hudMode").textContent = "Loading data…";
 
   const res = await fetch("data/plants.json", { cache: "no-store" });
@@ -14,9 +21,6 @@ async function loadPlants(){
 
   const data = await res.json();
 
-  // Support both shapes:
-  // A) { region, plants: [...] } (old)
-  // B) { plants: [...] } (new file you generated)
   state.region = data.region || {
     name: "Leipzig (demo)",
     center: { lat: 51.3397, lon: 12.3731 }
@@ -24,7 +28,6 @@ async function loadPlants(){
 
   const rawPlants = data.plants || [];
   state.plants = rawPlants.map(p => {
-    // Convert "demo.occurrences" => "occurrences" in the structure the app expects
     const demoOcc = (p.demo && Array.isArray(p.demo.occurrences)) ? p.demo.occurrences : [];
     const occurrences = demoOcc.map(o => ({
       decimalLatitude: o.lat,
@@ -49,10 +52,14 @@ async function loadPlants(){
 
   document.getElementById("hudMode").textContent =
     "Wikimedia images + demo occurrences (MVP)";
+
+  debug(`loaded ${state.plants.length} plants`);
 }
 
 function locate(){
+  debug("locate()");
   if(!navigator.geolocation) return;
+
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       setLocation(pos.coords.latitude, pos.coords.longitude);
@@ -68,12 +75,6 @@ function onSelectPlant(plant){
   openSpecimen(plant);
 }
 
-function onSelectPlant(plant){
-  showPlantOnMap(plant);
-  openSpecimen(plant);
-}
-
-// Timeframe helper (for now: last 365 days)
 function lastDaysRange(days){
   const end = new Date();
   const start = new Date(end.getTime() - days * 24 * 60 * 60 * 1000);
@@ -81,7 +82,7 @@ function lastDaysRange(days){
 }
 
 function showAllHotspots(){
-  // later you’ll swap this to real GBIF-occurrence dates. same logic.
+  debug("showAllHotspots()");
   const { start, end } = lastDaysRange(365);
 
   const perPlant = state.plants.map(p =>
@@ -93,6 +94,7 @@ function showAllHotspots(){
 }
 
 function wireButtons(){
+  debug("wireButtons()");
   document.getElementById("btnLocate").addEventListener("click", locate);
   document.getElementById("btnAll").addEventListener("click", plotAllOccurrences);
   document.getElementById("btnResort").addEventListener("click", () => renderDeck({ onSelectPlant }));
@@ -100,12 +102,21 @@ function wireButtons(){
 }
 
 async function main(){
-  initMap();
-  initSpecimen();
-  initRiskModal();
-  wireButtons();
+  debug("start");
 
   try{
+    debug("initMap()");
+    initMap();
+
+    debug("initSpecimen()");
+    initSpecimen();
+
+    debug("initRiskModal()");
+    initRiskModal();
+
+    debug("wireButtons()");
+    wireButtons();
+
     await loadPlants();
 
     if(state.region?.center && typeof state.region.center.lat === "number" && typeof state.region.center.lon === "number"){
@@ -115,10 +126,13 @@ async function main(){
     showAllHotspots();
     renderDeck({ onSelectPlant });
     locate();
+
+    debug("ok");
   } catch(e){
     console.error(e);
-    document.getElementById("hudMode").textContent = "Missing/invalid data file: data/plants.json";
+    document.getElementById("hudMode").textContent = "Startup error: " + (e?.message || e);
     document.getElementById("regionPill").textContent = "Region: Error";
+    debug("ERROR");
   }
 }
 
