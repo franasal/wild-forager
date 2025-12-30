@@ -41,7 +41,7 @@ export function plotAllOccurrences(){
 
       const date = o.eventDate || "unknown date";
       const locality = o.verbatimLocality || "";
-      const recordedBy = o.recordedBy ? `Recorded by: ${o.recordedBy}` : "";
+      const count = (o.occurrenceCount != null) ? `Count: ${o.occurrenceCount}` : "";
 
       L.circleMarker([lat, lon], {
         radius: 4,
@@ -55,7 +55,7 @@ export function plotAllOccurrences(){
         `${escapeHtml(p.scientificName || "")}<br>` +
         `${escapeHtml(date)}<br>` +
         `${escapeHtml(locality)}<br>` +
-        `${escapeHtml(recordedBy)}`
+        `${escapeHtml(count)}`
       )
       .addTo(occurrencesLayer);
     }
@@ -79,7 +79,7 @@ export function showPlantOnMap(plant){
 
     const date = o.eventDate || "unknown date";
     const locality = o.verbatimLocality || "";
-    const recordedBy = o.recordedBy ? `Recorded by: ${o.recordedBy}` : "";
+    const count = (o.occurrenceCount != null) ? `Count: ${o.occurrenceCount}` : "";
 
     L.circleMarker([lat, lon], {
       radius: 5,
@@ -93,7 +93,7 @@ export function showPlantOnMap(plant){
       `${escapeHtml(plant.scientificName || "")}<br>` +
       `${escapeHtml(date)}<br>` +
       `${escapeHtml(locality)}<br>` +
-      `${escapeHtml(recordedBy)}`
+      `${escapeHtml(count)}`
     )
     .addTo(occurrencesLayer);
   }
