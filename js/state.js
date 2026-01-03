@@ -1,7 +1,13 @@
 export const state = {
-  plants: [],
+  plants: [],          // all loaded plants
+  selectedPlants: [],  // top N (or filtered set) we actually show
   region: null,
   userLat: 51.3397,
   userLon: 12.3731,
   selected: null,
+  filters: {
+    topN: 12,
+    yearFrom: null,
+    yearTo: null,
+  },
 };
